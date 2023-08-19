@@ -1,0 +1,25 @@
+<html>
+    <body>
+        <p>Elapsed Time: {{elapsed_time}}</p>
+
+        <table>
+            <tr>
+                <th>#</th>
+                <th>Audio</th>
+                <th>Transcript</th>
+            </tr>
+            {% for wavFile, text in wavFiles_transcriptTexts %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>
+                    <audio controls>
+                        <source src="{{wavFile}}" type="audio/wav">
+                      Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>{{text}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>
