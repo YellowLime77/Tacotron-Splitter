@@ -2,3 +2,4 @@
 /venv/Lib/site-packages/torch
 **dataset.zip
 temp_dataset/
+*.wav
