@@ -23,6 +23,7 @@ class DatasetCreator:
         if not os.path.isdir(filelistsPath):
             os.makedirs(filelistsPath)
 
+        # Actually puts the files in the folders
         self.__copy_wav_files(self.wavFiles, wavsPath)
         self.__create_list(self.transcriptTexts, self.wavFiles, filelistsPath)
     
