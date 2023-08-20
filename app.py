@@ -38,11 +38,11 @@ def result():
     wavFiles = [url_for('static', filename=segment_folder_name + "/" + f) for f in os.listdir(static_segment_folder_name) if os.path.isfile(os.path.join(static_segment_folder_name, f))]
     transcriptTexts = [segment['text'] for segment in full_transcription['segments']]
 
-    wavFilePaths = [f for f in os.listdir(static_segment_folder_name) if os.path.isfile(os.path.join(static_segment_folder_name, f))]
+    wavFilePaths = [os.path.join(static_segment_folder_name, f) for f in os.listdir(static_segment_folder_name) if os.path.isfile(os.path.join(static_segment_folder_name, f))]
 
 
     temp_dataset_folder = 'temp_dataset'
-    zip_filename = 'dataset.zip'
+    zip_filename = 'dataset'
 
     dataset_creator = DatasetCreator(wavFilePaths, transcriptTexts)
     dataset_creator.create_dataset(temp_dataset_folder)

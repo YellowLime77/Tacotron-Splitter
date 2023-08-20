@@ -27,7 +27,7 @@ class DatasetCreator:
     def __create_list(self, transcriptionTexts, wavFileNames, filelistsPath):
         file_contents = ""
         for transcription_text, wav_filename in zip(transcriptionTexts, wavFileNames):
-            file_contents += f'{wav_filename}|{transcription_text}\n'
+            file_contents += f'wavs/{os.path.basename(wav_filename)}|{transcription_text}\n'
         
         with open(os.path.join(filelistsPath, 'list.txt'), 'w') as f:
             f.write(file_contents)
