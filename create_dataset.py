@@ -34,3 +34,4 @@ class DatasetCreator:
 
     def zip(self, datasetFolder, zipFile):
         shutil.make_archive(zipFile, 'zip', datasetFolder)
+        os.remove(datasetFolder)
