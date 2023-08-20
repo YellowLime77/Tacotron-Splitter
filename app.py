@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, send_from_directory
 from werkzeug.utils import secure_filename
 
 import os
@@ -49,6 +49,10 @@ def result():
     dataset_creator.zip(temp_dataset_folder, zip_filename)
 
     return render_template('results.html', elapsed_time=timer.stop(), wavFiles_transcriptTexts=zip(wavFiles, transcriptTexts))
+
+@app.route('/downloaddataset', methods=['GET', 'POST'])
+def downloaddataset():
+    return send_from_directory('static', 'dataset.zip')
 
 def split_audio_from_transcription(filename, transcription):
     audio_splitter = AudioSplitter(filename)
