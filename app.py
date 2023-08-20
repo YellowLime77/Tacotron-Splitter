@@ -6,6 +6,7 @@ import os
 from whisper_functions import WhisperFunctions
 from split_audio import AudioSplitter
 from custom_timer import Timer
+from create_dataset import DatasetCreator
 
 app = Flask(__name__)
 whisper_functions = WhisperFunctions("base")
@@ -37,6 +38,16 @@ def result():
     wavFiles = [url_for('static', filename=segment_folder_name + "/" + f) for f in os.listdir(static_segment_folder_name) if os.path.isfile(os.path.join(static_segment_folder_name, f))]
     transcriptTexts = [segment['text'] for segment in full_transcription['segments']]
 
+    wavFilePaths = [f for f in os.listdir(static_segment_folder_name) if os.path.isfile(os.path.join(static_segment_folder_name, f))]
+
+
+    temp_dataset_folder = 'temp_dataset'
+    zip_filename = 'dataset.zip'
+
+    dataset_creator = DatasetCreator(wavFilePaths, transcriptTexts)
+    dataset_creator.create_dataset(temp_dataset_folder)
+    dataset_creator.zip(temp_dataset_folder, zip_filename)
+
     return render_template('results.html', elapsed_time=timer.stop(), wavFiles_transcriptTexts=zip(wavFiles, transcriptTexts))
 
 def split_audio_from_transcription(filename, transcription):
@@ -44,7 +55,6 @@ def split_audio_from_transcription(filename, transcription):
     for index, segment in enumerate(transcription['segments']):
         segment_segment = audio_splitter.segment_audio(segment["start"], segment["end"])
         audio_splitter.export_audio(segment_segment, f'static/segments/chunk{index}.wav')
-
 
 if __name__ == '__main__':
     app.secret_key = 'WHAT A KEY!!!!'
