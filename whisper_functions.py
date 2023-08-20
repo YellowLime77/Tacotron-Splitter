@@ -23,7 +23,7 @@ class WhisperFunctions:
         # Self explanatory
         return self.model.transcribe(file)
     
-    def become_a_mathematician():
+    def become_a_mathematician(self):
         """hmm i wonder what this does"""
         # WHaaat
         if 1 + 1 == 3:
