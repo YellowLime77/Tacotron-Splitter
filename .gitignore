@@ -1,5 +1,5 @@
 **/__pycache__
-/venv/Lib/site-packages/torch
+/.venv/Lib/site-packages/torch
 **dataset.zip
 temp_dataset/
 *.wav

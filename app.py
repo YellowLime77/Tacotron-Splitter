@@ -3,7 +3,7 @@ A simple web app using Flask that splits audio and transcribes it using OpenAI's
 
 ( ͡°( ͡° ͜ʖ( ͡° ͜ʖ ͡°)ʖ ͡°) ͡°)
 
-🟢+🍋=me
+🟢🍋
 """
 
 # Imports
@@ -11,6 +11,9 @@ from flask import Flask, render_template, request, redirect, url_for, session, s
 from werkzeug.utils import secure_filename
 
 import os
+
+import json
+import shutil
 
 from whisper_functions import WhisperFunctions
 from split_audio import AudioSplitter
@@ -35,15 +38,18 @@ def upload_file():
     if request.method == 'POST':
         # Saves uploaded file to the disk
         f = request.files['audioFile']
-        filename = f.filename
-        f.save(secure_filename(filename))
+        filename = os.path.join('static', secure_filename(f.filename))
+        f.save(filename)
 
         # For tracking how long the transcription takes
         timer.start()
 
-        # Saves both the wav filename and the transcription to the session
+        # Saves the wav filename to the session
         session['wavFile'] = filename
-        session['transcription'] = whisper_functions.transcribe(filename)
+
+        # Saves the transcription to a text file
+        with open(os.path.join('static', 'transcription.txt'), 'w') as file:
+            json.dump(whisper_functions.transcribe(filename), file)
 
         return redirect(url_for('result'))
     
@@ -57,9 +63,12 @@ def result():
     and contains a table to preview the audio and the corresponding transcription
     """
 
-    # Gets the transcription and wav filename from the session
-    full_transcription = session['transcription']
+    # Gets the wav filename from the session
     wavFile = session['wavFile']
+
+    # Gets transcript from file
+    with open(os.path.join('static', 'transcription.txt'), 'r') as file:
+        full_transcription = json.load(file)
 
     split_audio_from_transcription(wavFile, full_transcription)
 
@@ -73,6 +82,7 @@ def result():
     # Dataset creator
     # Just another variable for the dataset creator
     wavFilePaths = [os.path.join(static_segment_folder_name, f) for f in os.listdir(static_segment_folder_name) if os.path.isfile(os.path.join(static_segment_folder_name, f))]
+    wavFilePaths = sorted(wavFilePaths, key=lambda x: int(''.join([character for character in list(x) if character.isdigit()])))
 
     # Changeable variables for the dataset creator
     temp_dataset_folder = 'temp_dataset'
@@ -103,8 +113,20 @@ def split_audio_from_transcription(filename, transcription):
         audio_splitter.export_audio(segment_segment, f'static/segments/chunk{index}.wav')
 
 if __name__ == '__main__':
-    # Don't tell anyone 🤫
-    app.secret_key = 'WHAT A (not so secret) KEY!!!!'
+    # 🤫
+    app.secret_key = 'a not so secret key'
+
+    # Remove temp static files
+    try:
+        shutil.rmtree('static')
+    except:
+        print('prob first time running')
+    os.makedirs('static/segments')
+
+    if 1 + 1 == 3:
+        print('BREAKTHROUGH!!!!')
+    else:
+        print('damn')
 
     # Starts the Flask app
     app.run(debug=True)

@@ -4,31 +4,31 @@ class TimerException(Exception):
     """uh"""
 
 class Timer:
-    """A stopwatch down to the 0.000000000001 second, just for you"""
+    """Actually a stopwatch, not a timer"""
 
     def __init__(self):
         self.start_time = None
     
     def start(self):
-        """ON YOUR MARK... GET SET..."""
+        """On your mark... get set..."""
 
         # If this happens, uhohs
         if self.start_time is not None:
             raise TimerException("🤷")
         
-        #GO GO GO GO GOOOOO!!!
+        # Go!
         self.start_time = time.perf_counter()
     
     def stop(self) -> float:
-        """FINISH!"""
+        """Stop!"""
 
         # Uhohs again
         if self.start_time is None:
-            raise TimerException("🤷🤷")
+            raise TimerException("🤷")
         
-        # This tells me how bad my pc performs
+        # Stops the timer
         elapsed_time = time.perf_counter() - self.start_time
         self.start_time = None
 
-        # and shows it to me
+        # and shows it to the user
         return elapsed_time

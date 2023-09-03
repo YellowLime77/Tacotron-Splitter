@@ -48,7 +48,7 @@ class DatasetCreator:
             f.write(file_contents)
 
     def zip(self, datasetFolder, zipFile):
-        """Mr Zippy to do the (insert pun here)"""
+        """Zips up the dataset folder for download"""
 
         # Zips up the temp dataset file into a zip file
         shutil.make_archive(os.path.join('static', zipFile), 'zip', datasetFolder)
